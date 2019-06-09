@@ -7,11 +7,8 @@
         Конструктор конкурсной документации
     </title>
     <script src="jquery-3.4.1.min.js"></script>
+    <script src="myScript.js"></script>
     <script>
-        //$(function () {
-        //    $("#includedContent").load("inclBody.html");
-        //});
-
         $.ajaxSetup({
             'beforeSend': function (xhr) {
                 xhr.overrideMimeType('text/html; charset=ISO 8859-5');
@@ -23,27 +20,16 @@
                 .load(blockName);
         }
 
-        $(function () {
-            //AddBlock('block1.html');
-        });
-/**/</script>
+    </script>
 </head>
 
 <body style="background-color:#E8E8E8;">
-    <!-- <center>
-         <H3>
-             Конструктор конкурсной документац  для сферы закупок с функцией проверки актуальности изменений законодательства
-         </H3>
-     </center>
-     <h4>
-         Конкурс на приобретение серверного оборудования
-     </h4>-->
     <table border="0" width="100%">
         <tr>
             <td colspan="3">
                 <table width="100%" border="0" style="background-color:#4B79BB;">
                     <tr>
-                        <td width="50px" height="60px" style="background-color:#253C5D;"></td>
+                        <td width="50px" height="60px" style="background-color:#253C5D;" onclick="moveIndex();"></td>
                         <td width="160px" align="center">
                             <p style="color:#1A2A41; font-size:30px; font-family:Arial; font-weight:bold">КоКоДо</p>
                         </td>
@@ -61,42 +47,12 @@
                         <td width="100%"></td>
                     </tr>
                     <tr height="15x">
-<!--                        <td colspan="5"></td>-->
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td colspan="5"></td>
                     </tr>
                 </table>
-    <!--<table>
-        <tr>
-            <td>
-                <H3>
-                    КоКоДо
-                </H3>
-            </td>
-            <td width="10px"></td>
-            <td>
-                <h6>
-                    Конструктор конкурсной документац  для сферы закупок с функцией проверки актуальности изменений законодательства
-                </h6>
-            </td>
-        </tr>
-    </table>-->
             </td>
             
         </tr>
-        <!--<tr>
-            <td colspan="2">
-                <input type="button" value="Структура документа" />
-                <input type="button" value="Документы заявки" />
-                <input type="button" value="Проверка документа" />
-                <input type="button" value="Загрузка" />
-                <input type="button" value="Выгрузка" />
-            </td>
-            <td></td>
-        </tr>-->
         <tr>
             <!--
             background-color:#E1E6EB --Основной фон
@@ -114,8 +70,6 @@
                 </select>
                 <br /><br />-->
                 <div style="background-color:#6A7785; color:white"></div>
-                <!--<div style="align-content:center">Структура (оглавление документа)</div>-->
-
                 <ul class="menu">
                     <li>
                         <a href="russian.html">ЧАСТЬ I. ОБЩИЕ УСЛОВИЯ ПРОВЕДЕНИЯ АУКЦИОНА В ЭЛЕКТРОННОЙ ФОРМЕ</a>

@@ -7,6 +7,16 @@
     </title>
     <script src="jquery-3.4.1.min.js"></script>
     <script src="myScript.js"></script>
+    <script>
+        $(":input").bind('onchange', function () {
+          var sumValue = $("#sumValue").val();
+          $("#reward").text(sumValue);
+        });
+
+        function CheckSumValue() {
+
+        }
+    </script>
 </head>
 
 <body>
@@ -14,6 +24,7 @@
 
         <tr>
             <td colspan="3">
+                <p id="potential">Potential reward : <b id="reward"></b></p>
                 <table width="100%" border="0" style="background-color:#4B79BB;">
                     <tr>
                         <td width="50px" height="60px" style="background-color:#253C5D;" onclick="moveIndex();"></td>
@@ -43,45 +54,75 @@
 
         <tr>
             <td valign="top">
-                Управление шаблонами
+                Мастер формирования документа
             </td>
             <td>
-                <br /><br /><br />
+                
                 <form>
                     <table>
                         <tr>
-                            <td width="200px">Название шаблона:</td>
-                            <td><input type="text" /><br /><br /></td>
+                            <td></td>
+                            <td></td>
                         </tr>
                         <tr>
                             <td>Направление:</td>
                             <td>
                                 <select>
-                                    <option disabled>Выберите направление</option>
-                                    <option value="Чебурашка">Безопасность, связь коммуникации                    </option>
+                                    <option disabled>Тип заявки</option>
+                                    <option value="Чебурашка">Аукцион</option>
                                     <option value="Крокодил Гена">Офис/ Канцелярия                    </option>
                                     <option value="Шапокляк">Информационные технологии, компьютеры и оборудование</option>
                                     <option value="Крыса Лариса">Наука, Исследование/ Образование</option>
                                 </select>
                             </td>
+                            <td></td>
                         </tr>
+
                         <tr>
-                            <td>Текст шаблона:</td>
                             <td>
-                                <textarea rows="20" cols="175"></textarea>
+                                Срок проведения:
                             </td>
+                            <td>
+                                <input type="datetime-local" onchange="console.log(this.value.split('T')[0]);" />
+                            </td>
+                            <td></td>
                         </tr>
+
                         <tr>
-                            <td>Добавить ссылку на НПА (нормативно-правовой акт):</td>
+                            <td>Сумма:</td>
                             <td>
-                                <a href="">Федеральный закон "О контрактной системе в сфере закупок товаров, работ, услуг для обеспечения государственных и муниципальных нужд" от 05.04.2013 N 44-ФЗ (последняя редакция)</a><br />
-                                <a href="">Федеральный закон от 01.04.2019 N 45-ФЗ "О внесении изменений в Федеральный закон "О приватизации государственного и муниципального имущества"</a><br />
-                                <input type="button" value="+" />
+                                <input type="number" onchange="CheckSumValue();" name="sumValue" id="sumValue" />
                             </td>
+                            <td></td>
                         </tr>
+
+                        <tr>
+                            <td>
+                                Лицензии
+                            </td>
+                            <td>
+                                <input type="checkbox" name="favorite_pet" value="Cats">Лицензия ФСБ<br>
+                                <input type="checkbox" name="favorite_pet" value="Cats">Лицензия ФСТЭК<br>
+                                <input type="checkbox" name="favorite_pet" value="Cats">Лицензия на строительство<br>
+                                <input type="checkbox" name="favorite_pet" value="Cats">Пожарная безопасность<br>
+                            </td>
+                            <td></td>
+                        </tr>
+
+                        <tr>
+                            <td>Импортозамещение</td>
+                            <td>
+                                <hr />
+                                <input type="checkbox" name="import" value="Dogs">Импортозамещение<br>
+                            </td>
+                            <td></td>
+                        </tr>
+
+
                         <tr>
                             <td></td>
                             <td><input type="submit" value="Сохранить" /></td>
+                            <td></td>
                         </tr>
                         <tr>
                             <td></td>
