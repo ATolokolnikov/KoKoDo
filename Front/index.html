@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="mystyle.css">
+    <style>
+        
+
+.container {
+    width: 1920px;
+    height: 1080px;
+    background-image: url("ImgDesign/indexImg.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+}​
+ .fill {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden
+}
+.fill img {
+    flex-shrink: 0;
+    min-width: 100%;
+    min-height: 100%
+}
+
+    </style>
+    <title>
+        Конструктор конкурсной документации
+    </title>
+    <script src="jquery-3.4.1.min.js"></script>
+    <script>
+        $(function () {
+            $("#includedContent").load("ib.html");
+        });
+    </script>
+</head>
+
+<body>
+    <!--<img src="ImgDesign/indexImg.png" />-->
+    <!--<div class="container"></div>-->
+    <div class="fill">
+        <a href="StartPage.html">
+            <img src="ImgDesign/indexImg.png" alt="" />
+        </a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,64 @@
+h3 {
+    color: red;
+    margin-left: 20px;
+}
+.sub-menu {
+    display: none;
+}
+
+    .main-item:focus ~ .sub-menu,
+    .main-item:active ~ .sub-menu,
+    .sub-menu:hover {
+        display: block;
+    } 
+
+    tr.menuItem{
+        color: red;
+        
+    }
+    tr.menuItem:hover{
+        color:green;
+    }
+
+/*http://htmlbook.ru/css/hover*/
+ul {
+    width: 300px; /* Ширина меню */
+    list-style: none; /* Для списка убираем маркеры */
+    margin: 0; /* Нет отступов вокруг */
+    padding: 0; /* Убираем поля вокруг текста */
+    font-family: Arial, sans-serif; /* Рубленый шрифт для текста меню */
+    font-size: 10pt; /* Размер названий в пункте меню */
+}
+
+li ul {
+    position: absolute; /* Подменю позиционируются абсолютно */
+    display: none; /* Скрываем подменю */
+    margin-left: 300px; /* Сдвигаем подменю вправо */
+    margin-top: -2em; /* Сдвигаем подменю вверх */
+}
+
+li a {
+    display: block; /* Ссылка как блочный элемент */
+    padding: 10px; /* Поля вокруг надписи */
+    text-decoration: none; /* Подчеркивание у ссылок убираем */
+    /*color: #666;*/ /* Цвет текста */
+    color: white; /* Цвет текста */
+    border: 1px solid #ccc; /* Рамка вокруг пунктов меню */
+    /*background-color: #f0f0f0; */ /* Цвет фона */
+    background-color: #6A7785; /* Цвет фона */
+    border-bottom: none; /* Границу снизу не проводим */
+}
+
+    li a:hover {
+        color: #ffe; /* Цвет текста активного пункта */
+        /*background-color: #5488af; */ /* Цвет фона активного пункта */
+        background-color: #2C353F;
+    }
+
+li:hover ul {
+    display: block; /* При выделении пункта курсором мыши отображается подменю */
+}
+
+.brd {
+    border-bottom: 0px solid #ccc; /* Линия снизу */
+}
