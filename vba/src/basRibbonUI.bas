@@ -25,7 +25,7 @@ Public Sub Button_Click(ByVal ctl As Office.IRibbonControl _
 
     ' Нажата кнопка "Проверить на актуальность".
     Case "btnCheck"
-        DoEvents
+        CheckForActive
 
     ' Нажата неизвестная кнопка.
     Case Else

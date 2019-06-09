@@ -23,6 +23,8 @@ Public Function HttpResponse( _
     Dim sHeaderName As String
     Dim sHeaderValue As String
 
+100 EnterFrame mCode, "HTRES", "Запрос HTTP к серверу"
+
     On Error GoTo Handle_BUG
 
     ' Отобразить сообщение о загрузке данных.
@@ -32,13 +34,16 @@ Public Function HttpResponse( _
     ' -- Инициализация объектов.
     Set dicHeaders = New Scripting.Dictionary
 
-    ' TODO: Что искать (убрать вовне).
-    Set DictMarkers = New Scripting.Dictionary
-
     If http Is Nothing Then
         Set http = New WinHttpRequest
     End If
 
+    ' Если лист с HTTP не найден:
+    If xlSh_HTTP Is Nothing Then
+        GoTo Handle_EXIT
+    End If
+
+    ' Получить лист с HTTP.
     Set lstHeaders = xlSh_HTTP.ListObjects(ListName)
 
     ' Формирование словаря заголовков:
@@ -116,18 +121,21 @@ Public Function HttpResponse( _
     GoTo Handle_EXIT
 
 Handle_BUG:     ' Обработка ошибки VBA.
-    MsgBox "Зовите погромиста!! :)" _
+    MsgBox "Обратитесь к разработчику. " _
          & vbCrLf _
          & vbCrLf & "Ошибка VBA #" & Err.Number _
          & ": " & Err.Description _
            , vbCritical _
             , "Выгрузка из Глисы. Http-запрос"
+    GoTo Handle_EXIT
 
 Handle_EXIT:     ' Завершение функции.
+    On Error Resume Next
     Set dicHeaders = Nothing
     Set lrRow = Nothing
     Set lstHeaders = Nothing
     frmLoading.Hide
+999 LeaveFrame
 
 End Function
 
@@ -253,12 +261,23 @@ Public Function xlSh_HTTP() As Excel.Worksheet
 
     Dim appXL As Excel.Application
     Dim bk_HTTP As Excel.Workbook
+    Dim sHttpPath As String
+
+100 EnterFrame mCode, "SHTTP", "Получение параметров HTTP"
 
     ' Найти открытый файл с параметрами HTTP.
+    On Error Resume Next
     Set appXL = GetObject(, "Excel.Application")
+    On Error GoTo Result_EXIT
+
+    sHttpPath = Path & "\HTTP.xlsx"
 
     ' Если не найден открытый файл "HTTP.xlsx":
     If appXL Is Nothing Then
+        Set appXL = Excel.Application
+        Set bk_HTTP = appXL.Workbooks.Open(sHttpPath)
+        Set xlSh_HTTP = bk_HTTP.Sheets("HTTP")
+        appXL.Visible = True
         GoTo Result_EXIT
     End If
 
@@ -279,8 +298,17 @@ Public Function xlSh_HTTP() As Excel.Worksheet
     ' Захватить лист с параметрами HTTP-запросов.
     Set xlSh_HTTP = bk_HTTP.Sheets("HTTP")
 
+Result_OK:
+    GoTo Result_EXIT
+
+Result_BUG:
+    Msg vbCritical, gsMes_ErrUnexpected
+    GoTo Result_EXIT
+
 Result_EXIT:
+    On Error Resume Next
     Set appXL = Nothing
     Set bk_HTTP = Nothing
+999 LeaveFrame
 
 End Function

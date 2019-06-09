@@ -103,27 +103,94 @@ End Sub
 '-------------------------------------------------------------------------------
 Public Sub CheckForActive()
 
+    Dim ccParent As Word.ContentControl
     Dim dicMarkers As Scripting.Dictionary
-    Dim htmlAnchor As MSHTML.IHTMLAnchorElement
-    Dim htmlDoc As MSHTML.IHTMLDocument
+    Dim htmlAnchor As MSHTML.HTMLAnchorElement
+    Dim htmlAct As MSHTML.HTMLDocument
+    Dim htmlDoc As MSHTML.HTMLDocument
     Dim http As WinHttp.WinHttpRequest
+    Dim rngSent As Word.Range
+    Dim rxNd As New clsRegexMatch
 
 100 EnterFrame mCode, "CHECK", "Проверка на соответствие законодательству"
+    On Error GoTo Result_BUG
 
-    ' Параметры запроса в поисковую систему.
-    Set dicMarkers = New Scripting.Dictionary
-    dicMarkers.Add "query", "Заказчик признается исполнившим эту обязанность"
+    rxNd.SetPattern "&nd=(\d+).+&rdk=(\d+)"
 
-    ' Запрос в поисковую систему.
-    HttpResponse "GoogleThis", dicMarkers, http
+    For Each rngSent In docThis.Sentences
 
-    ' Парсинг ответа в формате HTML.
-    ParseHtml http, htmlDoc
+        If Len(rngSent.Text) > 5 Then
 
-    ' Определение ссылок результатов поиска.
-    'htmlDoc.
+            ' Параметры запроса в поисковую систему.
+            Set dicMarkers = New Scripting.Dictionary
+            dicMarkers.Add "query", rngSent.Text
+
+            ' Запрос в поисковую систему.
+            HttpResponse "GoogleThis", dicMarkers, http
+
+            ' Парсинг ответа в формате HTML.
+            ParseHtml http, htmlDoc
+
+            ' Определение ссылок результатов поиска.
+            For Each htmlAnchor In htmlDoc.getElementsByTagName("a")
+                If Not htmlAnchor.href Like "about:/*" Then
+                If Not htmlAnchor.href Like "*google*" Then
+                If htmlAnchor.href Like "*gov.ru*" Then
+                    rxNd.Execute htmlAnchor.href
+
+                    If rxNd.Count > 0 Then
+
+                        ' Параметры запроса в поисковую систему.
+                        Set dicMarkers = New Scripting.Dictionary
+                        dicMarkers.Add "nd", rxNd.Subs(0)
+                        dicMarkers.Add "rdk", rxNd.Subs(1)
+
+                        ' Запрос в поисковую систему.
+                        HttpResponse "OpenThis", dicMarkers, http
+                        ParseHtml http, htmlAct
+
+                        If htmlAct.textContent Like rngSent.Text Then
+                            GoTo Result_OK
+                        End If
+
+                    End If
+
+                End If
+                End If
+                End If
+            Next htmlAnchor
+
+        End If
+
+    Next rngSent
+
+    Set htmlAnchor = Nothing
+    Set rxNd = Nothing
 
 Result_OK:
+    If htmlAnchor Is Nothing Then
+
+        Set ccParent = rngSent.ParentContentControl
+        If Not ccParent Is Nothing Then
+            ccParent.Delete False
+        End If
+
+        Set ccParent = docThis.ContentControls.Add(wdContentControlRichText, rngSent)
+        ccParent.tag =
+        ccParent.title =
+
+    Else
+
+        Set ccParent = rngSent.ParentContentControl
+        If Not ccParent Is Nothing Then
+            ccParent.Delete False
+        End If
+
+        Set ccParent = docThis.ContentControls.Add(wdContentControlRichText, rngSent)
+        ccParent.tag =
+        ccParent.title =
+
+    End If
     GoTo Result_EXIT
 
 Result_BUG:
