@@ -121,6 +121,8 @@ Public Sub CheckForActive()
 
         If Len(rngSent.Text) > 5 Then
 
+            Set rngSent = docThis.Range(rngSent.Start, rngSent.End - 4)
+
             ' Параметры запроса в поисковую систему.
             Set dicMarkers = New Scripting.Dictionary
             dicMarkers.Add "query", rngSent.Text
@@ -150,7 +152,7 @@ Public Sub CheckForActive()
                         ParseHtml http, htmlAct
 
                         If htmlAct.textContent Like rngSent.Text Then
-                            GoTo Result_OK
+                            GoTo Next_OK
                         End If
 
                     End If
@@ -160,7 +162,38 @@ Public Sub CheckForActive()
                 End If
             Next htmlAnchor
 
+Next_OK:
+
+            If htmlAnchor Is Nothing Then
+    
+                If Not rngSent.ParentContentControl Is Nothing Then
+                    Set ccParent = rngSent.ParentContentControl
+                    If Not ccParent Is Nothing Then
+                        ccParent.Delete False
+                    End If
+                End If
+    
+                Set ccParent = docThis.ContentControls.Add(wdContentControlRichText, rngSent)
+                ccParent.Tag = "Не найдено"
+                ccParent.Title = "Не найдено"
+    
+            Else
+    
+                If Not rngSent.ParentContentControl Is Nothing Then
+                    Set ccParent = rngSent.ParentContentControl
+                    If Not ccParent Is Nothing Then
+                        ccParent.Delete False
+                    End If
+                End If
+    
+                Set ccParent = docThis.ContentControls.Add(wdContentControlRichText, rngSent)
+                ccParent.Tag = htmlAnchor.href
+                ccParent.Title = htmlAnchor.href
+    
+            End If
+
         End If
+        
 
     Next rngSent
 
@@ -168,29 +201,6 @@ Public Sub CheckForActive()
     Set rxNd = Nothing
 
 Result_OK:
-    If htmlAnchor Is Nothing Then
-
-        Set ccParent = rngSent.ParentContentControl
-        If Not ccParent Is Nothing Then
-            ccParent.Delete False
-        End If
-
-        Set ccParent = docThis.ContentControls.Add(wdContentControlRichText, rngSent)
-        ccParent.tag =
-        ccParent.title =
-
-    Else
-
-        Set ccParent = rngSent.ParentContentControl
-        If Not ccParent Is Nothing Then
-            ccParent.Delete False
-        End If
-
-        Set ccParent = docThis.ContentControls.Add(wdContentControlRichText, rngSent)
-        ccParent.tag =
-        ccParent.title =
-
-    End If
     GoTo Result_EXIT
 
 Result_BUG:

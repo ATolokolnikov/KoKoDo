@@ -83,7 +83,7 @@ Public Function HttpResponse( _
         If Not dicHeaders.Keys(iHeader) Like vbNullString Then
             sHeaderName = dicHeaders.Keys(iHeader)
             sHeaderValue = dicHeaders.Items(iHeader)
-            http.SetRequestHeader sHeaderName, sHeaderValue
+            http.SetRequestHeader sHeaderName, Replace(Replace(sHeaderValue, vbCr, ""), vbLf, "")
         End If
         End If
         End If
