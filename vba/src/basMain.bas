@@ -56,7 +56,8 @@ Public Sub Block_Add()
 
                 ' Для каждого КК, который соответствует пункту.
                 For Each cc In colCCs
-                    
+                    cc.Copy
+                    docThis.Range(docThis.Range.End, docThis.Range.End).PasteSpecial
                 Next cc
 
             ' Иначе (если блок не выбран):
@@ -90,7 +91,11 @@ Public Sub Block_Del()
 
     EnterFrame mCode, "BLKDE", "Удаление блока"
 
-    
+    If Not Selection.Range.ParentContentControl Is Nothing Then
+        Selection.Range.ParentContentControl.Delete False
+    Else
+        Msg vbExclamation, "В указанном месте блок не найден."
+    End If
 
     LeaveFrame
 
@@ -111,6 +116,7 @@ Public Sub CheckForActive()
     Dim http As WinHttp.WinHttpRequest
     Dim rngSent As Word.Range
     Dim rxNd As New clsRegexMatch
+    Dim sHtml As String
 
 100 EnterFrame mCode, "CHECK", "Проверка на соответствие законодательству"
     On Error GoTo Result_BUG
@@ -151,7 +157,13 @@ Public Sub CheckForActive()
                         HttpResponse "OpenThis", dicMarkers, http
                         ParseHtml http, htmlAct
 
-                        If htmlAct.textContent Like rngSent.Text Then
+                        sHtml = htmlAct.body.innerText
+                        Do While sHtml Like "*  *" Or rngSent.Text Like "*  *"
+                            sHtml = Replace(sHtml, "  ", " ")
+                            rngSent.Text = Replace(rngSent.Text, "  ", " ")
+                        Loop
+
+                        If sHtml Like "*" & rngSent.Text & "*" Then
                             GoTo Next_OK
                         End If
 
@@ -176,7 +188,9 @@ Next_OK:
                 Set ccParent = docThis.ContentControls.Add(wdContentControlRichText, rngSent)
                 ccParent.Tag = "Не найдено"
                 ccParent.Title = "Не найдено"
-    
+                'Options.DefaultHighlightColorIndex = wdRed
+                rngSent.HighlightColorIndex = wdRed
+
             Else
     
                 If Not rngSent.ParentContentControl Is Nothing Then
